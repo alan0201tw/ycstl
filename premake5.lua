@@ -8,8 +8,6 @@ workspace "ycstl"
         "Release"
     }
 
--- variables
-    -- cfg - configuration
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 project "ycstl"
@@ -57,41 +55,77 @@ project "ycstl"
     filter { "configurations:Release" }
         optimize "On"
 
-project "ycstl-test"
-    location "ycstl-test"
-    kind "ConsoleApp"
+project "gtest"
     language "C++"
-    cppdialect "C++17"
-    staticruntime "on"
-
+    kind "StaticLib"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
-
-    files
-    {
-        "vendor/googletest/googletest/include/gtest/**.h",
-        "vendor/googletest/googletest/src/gtest-all.cc",
-        "vendor/googletest/googletest/src/gtest_main.cc",
-        "%{prj.name}/src/**.h",
-        "%{prj.name}/src/**.cpp"
-    }
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
     includedirs
     {
-        "vendor/googletest/googletest/include/gtest",
-        "vendor/googletest/googletest/include",
-        "vendor/googletest/googletest",
-        "ycstl"
+        "vendor/googletest/googletest/",
+        "vendor/googletest/googletest/include"
     }
 
-    links
+    files
     {
-        "ycstl",
-        "gtest"
+        "vendor/googletest/googletest/src/**.h",
+        "vendor/googletest/googletest/src/gtest-all.cc",
     }
 
-    filter { "configurations:Debug" }
-        symbols "On"
+project "gtest_main"
+    language "C++"
+    kind "StaticLib"
+    targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+    objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    filter { "configurations:Release" }
-        optimize "On"
+    includedirs
+    {
+        "vendor/googletest/googletest/",
+        "vendor/googletest/googletest/include"
+    }
+
+    files
+    {
+        "vendor/googletest/googletest/src/gtest_main.cc",
+    }
+
+    links { "gtest" }
+
+function create_test_project(name)
+    project (path.getbasename(name))
+        location "ycstl-test"
+        kind "ConsoleApp"
+        language "C++"
+        cppdialect "C++20"
+        staticruntime "on"
+
+        targetdir ("bin/" .. outputdir .. "/%{prj.basename}")
+        objdir ("bin-int/" .. outputdir .. "/%{prj.basename}")
+
+        files { (name) }
+
+        includedirs
+        {
+            "vendor/googletest/googletest/include",
+            "ycstl"
+        }
+
+        links
+        {
+            "ycstl",
+            "gtest",
+            "gtest_main"
+        }
+
+        filter { "configurations:Debug" }
+            symbols "On"
+
+        filter { "configurations:Release" }
+            optimize "On"
+end
+
+test_src_files = os.matchfiles("ycstl-test/**.cpp")
+for i, file in pairs(test_src_files) do
+    create_test_project(file)
+end

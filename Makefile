@@ -10,17 +10,23 @@ endif
 
 ifeq ($(config),debug)
   ycstl_config = debug
-  ycstl_test_config = debug
+  gtest_config = debug
+  gtest_main_config = debug
+  test_set_config = debug
+  test_vector_config = debug
 
 else ifeq ($(config),release)
   ycstl_config = release
-  ycstl_test_config = release
+  gtest_config = release
+  gtest_main_config = release
+  test_set_config = release
+  test_vector_config = release
 
 else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := ycstl ycstl-test
+PROJECTS := ycstl gtest gtest_main test_set test_vector
 
 .PHONY: all clean help $(PROJECTS) 
 
@@ -32,15 +38,36 @@ ifneq (,$(ycstl_config))
 	@${MAKE} --no-print-directory -C . -f ycstl.make config=$(ycstl_config)
 endif
 
-ycstl-test: ycstl
-ifneq (,$(ycstl_test_config))
-	@echo "==== Building ycstl-test ($(ycstl_test_config)) ===="
-	@${MAKE} --no-print-directory -C ycstl-test -f Makefile config=$(ycstl_test_config)
+gtest:
+ifneq (,$(gtest_config))
+	@echo "==== Building gtest ($(gtest_config)) ===="
+	@${MAKE} --no-print-directory -C . -f gtest.make config=$(gtest_config)
+endif
+
+gtest_main: gtest
+ifneq (,$(gtest_main_config))
+	@echo "==== Building gtest_main ($(gtest_main_config)) ===="
+	@${MAKE} --no-print-directory -C . -f gtest_main.make config=$(gtest_main_config)
+endif
+
+test_set: ycstl gtest gtest_main
+ifneq (,$(test_set_config))
+	@echo "==== Building test_set ($(test_set_config)) ===="
+	@${MAKE} --no-print-directory -C ycstl-test -f test_set.make config=$(test_set_config)
+endif
+
+test_vector: ycstl gtest gtest_main
+ifneq (,$(test_vector_config))
+	@echo "==== Building test_vector ($(test_vector_config)) ===="
+	@${MAKE} --no-print-directory -C ycstl-test -f test_vector.make config=$(test_vector_config)
 endif
 
 clean:
 	@${MAKE} --no-print-directory -C . -f ycstl.make clean
-	@${MAKE} --no-print-directory -C ycstl-test -f Makefile clean
+	@${MAKE} --no-print-directory -C . -f gtest.make clean
+	@${MAKE} --no-print-directory -C . -f gtest_main.make clean
+	@${MAKE} --no-print-directory -C ycstl-test -f test_set.make clean
+	@${MAKE} --no-print-directory -C ycstl-test -f test_vector.make clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -53,6 +80,9 @@ help:
 	@echo "   all (default)"
 	@echo "   clean"
 	@echo "   ycstl"
-	@echo "   ycstl-test"
+	@echo "   gtest"
+	@echo "   gtest_main"
+	@echo "   test_set"
+	@echo "   test_vector"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

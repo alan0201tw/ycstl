@@ -20,7 +20,7 @@ endif
 
 RESCOMP = windres
 DEFINES +=
-INCLUDES += -I../vendor/googletest/googletest/include/gtest -I../vendor/googletest/googletest/include -I../vendor/googletest/googletest -I../ycstl
+INCLUDES += -I../vendor/googletest/googletest/include -I../ycstl
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -38,8 +38,8 @@ TARGET = $(TARGETDIR)/ycstl-test.exe
 OBJDIR = ../bin-int/Debug-windows-x86_64/ycstl-test
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++17
-LIBS += ../bin/Debug-windows-x86_64/ycstl/ycstl.lib -lgtest
-LDDEPS += ../bin/Debug-windows-x86_64/ycstl/ycstl.lib
+LIBS += ../bin/Debug-windows-x86_64/ycstl/ycstl.lib ../bin/Debug/gtest.lib
+LDDEPS += ../bin/Debug-windows-x86_64/ycstl/ycstl.lib ../bin/Debug/gtest.lib
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
@@ -48,8 +48,8 @@ TARGET = $(TARGETDIR)/ycstl-test.exe
 OBJDIR = ../bin-int/Release-windows-x86_64/ycstl-test
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17
-LIBS += ../bin/Release-windows-x86_64/ycstl/ycstl.lib -lgtest
-LDDEPS += ../bin/Release-windows-x86_64/ycstl/ycstl.lib
+LIBS += ../bin/Release-windows-x86_64/ycstl/ycstl.lib ../bin/Release/gtest.lib
+LDDEPS += ../bin/Release-windows-x86_64/ycstl/ycstl.lib ../bin/Release/gtest.lib
 ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
 
 endif
@@ -64,12 +64,12 @@ endif
 GENERATED :=
 OBJECTS :=
 
-GENERATED += $(OBJDIR)/gtest-all.o
 GENERATED += $(OBJDIR)/gtest_main.o
 GENERATED += $(OBJDIR)/set.o
-OBJECTS += $(OBJDIR)/gtest-all.o
+GENERATED += $(OBJDIR)/vector.o
 OBJECTS += $(OBJDIR)/gtest_main.o
 OBJECTS += $(OBJDIR)/set.o
+OBJECTS += $(OBJDIR)/vector.o
 
 # Rules
 # #############################################
@@ -133,13 +133,13 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/gtest-all.o: ../vendor/googletest/googletest/src/gtest-all.cc
-	@echo "$(notdir $<)"
-	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/gtest_main.o: ../vendor/googletest/googletest/src/gtest_main.cc
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/set.o: src/set.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/vector.o: src/vector.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

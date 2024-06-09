@@ -2,12 +2,15 @@
 
 #include <set>
 
+#include "common.hpp"
+
 namespace ycstl {
 
 template <typename... Args>
-class ycset : std::set<Args...> {
+class YcSet : public std::set<Args...>, public yccommon<YcSet<Args...>> {
 public:
-    constexpr bool is_sorted() const { return true; }
+    static constexpr bool isSorted() { return true; }
+    static constexpr bool isUnique() { return true; }
 };
 
 }  // namespace ycstl
