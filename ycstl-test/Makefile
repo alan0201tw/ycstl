@@ -20,7 +20,7 @@ endif
 
 RESCOMP = windres
 DEFINES +=
-INCLUDES += -I../vendor/googletest/googletest/include/gtest -I../vendor/googletest/googletest/include -I../vendor/googletest/googletest
+INCLUDES += -I../vendor/googletest/googletest/include/gtest -I../vendor/googletest/googletest/include -I../vendor/googletest/googletest -I../ycstl
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -66,10 +66,10 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/gtest-all.o
 GENERATED += $(OBJDIR)/gtest_main.o
-GENERATED += $(OBJDIR)/test.o
+GENERATED += $(OBJDIR)/set.o
 OBJECTS += $(OBJDIR)/gtest-all.o
 OBJECTS += $(OBJDIR)/gtest_main.o
-OBJECTS += $(OBJDIR)/test.o
+OBJECTS += $(OBJDIR)/set.o
 
 # Rules
 # #############################################
@@ -139,7 +139,7 @@ $(OBJDIR)/gtest-all.o: ../vendor/googletest/googletest/src/gtest-all.cc
 $(OBJDIR)/gtest_main.o: ../vendor/googletest/googletest/src/gtest_main.cc
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/test.o: src/test.cpp
+$(OBJDIR)/set.o: src/set.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

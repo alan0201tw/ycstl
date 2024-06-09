@@ -5,7 +5,8 @@
 namespace ycstl {
 
 template <typename... Args>
-class ycset : std::set<Args> {
+class ycset : std::set<Args...> {
+public:
     constexpr bool is_sorted() const { return true; }
 };
 

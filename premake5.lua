@@ -80,7 +80,8 @@ project "ycstl-test"
     {
         "vendor/googletest/googletest/include/gtest",
         "vendor/googletest/googletest/include",
-        "vendor/googletest/googletest"
+        "vendor/googletest/googletest",
+        "ycstl"
     }
 
     links
