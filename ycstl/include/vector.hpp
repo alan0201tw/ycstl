@@ -11,10 +11,12 @@ template <typename... Args>
 class YcSortedVector;
 
 template <typename... Args>
-class YcVector : public std::vector<Args...>, public YcCommon<YcSet<Args...>> {
+class YcVector : public std::vector<Args...>, public YcCommon<YcVector<Args...>> {
 public:
     template <typename... CtorArgs>
     YcVector(CtorArgs&&... ctorArgs) : std::vector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
+    template <class T>
+    YcVector(std::initializer_list<T>&& ctorArgs) : std::vector<Args...>(ctorArgs) {}
 
     static constexpr bool isSorted() { return false; }
     static constexpr bool isUnique() { return false; }

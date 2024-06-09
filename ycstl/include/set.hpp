@@ -16,15 +16,6 @@ public:
 
     static constexpr bool isSorted() { return true; }
     static constexpr bool isUnique() { return true; }
-
-    bool isSubsetOf(const auto& rhs) const {
-        for (const auto& entry : *this) {
-            if (false == rhs.contains(entry)) {
-                return false;
-            }
-        }
-        return true;
-    }
 };
 
 }  // namespace ycstl

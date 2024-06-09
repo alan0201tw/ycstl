@@ -29,8 +29,8 @@ TEST(set, isSubsetOf) {
     EXPECT_FALSE(testSet0.isSubsetOf(stlSet));
     EXPECT_TRUE(testSet2.isSubsetOf(stlSet));
 
-    const auto stlunordederSet = std::unordered_set<int> {0, 1, 2, 3, 4, 5};
-    EXPECT_TRUE(testSet0.isSubsetOf(stlunordederSet));
-    EXPECT_TRUE(testSet1.isSubsetOf(stlunordederSet));
-    EXPECT_FALSE(testSet2.isSubsetOf(stlunordederSet));
+    const auto stlUnordederSet = std::unordered_set<int> {0, 1, 2, 3, 4, 5};
+    EXPECT_TRUE(testSet0.isSubsetOf(stlUnordederSet));
+    EXPECT_TRUE(testSet1.isSubsetOf(stlUnordederSet));
+    EXPECT_FALSE(testSet2.isSubsetOf(stlUnordederSet));
 }
