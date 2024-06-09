@@ -391,3 +391,4 @@ healthchecksdb
 
 .vscode/
 *.make
+Makefile

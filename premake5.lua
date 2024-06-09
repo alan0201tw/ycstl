@@ -125,3 +125,16 @@ test_src_files = os.matchfiles("ycstl-test/**.cpp")
 for i, file in pairs(test_src_files) do
     create_test_project(file)
 end
+
+newaction {
+    trigger = "run-tests",
+    description = "Export project information as Lua tables",
+
+    execute = function()
+        os.execute("wsl --exec make")
+        testcases = os.matchfiles("bin/**/test*")
+        for i, testcase in pairs(testcases) do
+            os.execute("wsl --exec " .. testcase)
+        end
+    end
+}
