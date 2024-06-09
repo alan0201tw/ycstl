@@ -7,10 +7,24 @@
 namespace ycstl {
 
 template <typename... Args>
-class YcSet : public std::set<Args...>, public yccommon<YcSet<Args...>> {
+class YcSet : public std::set<Args...>, public YcCommon<YcSet<Args...>> {
 public:
+    template <typename... CtorArgs>
+    YcSet(CtorArgs&&... ctorArgs) : std::set<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
+    template <class T>
+    YcSet(std::initializer_list<T>&& ctorArgs) : std::set<Args...>(ctorArgs) {}
+
     static constexpr bool isSorted() { return true; }
     static constexpr bool isUnique() { return true; }
+
+    bool isSubsetOf(const auto& rhs) const {
+        for (const auto& entry : *this) {
+            if (false == rhs.contains(entry)) {
+                return false;
+            }
+        }
+        return true;
+    }
 };
 
 }  // namespace ycstl

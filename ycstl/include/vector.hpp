@@ -11,8 +11,11 @@ template <typename... Args>
 class YcSortedVector;
 
 template <typename... Args>
-class YcVector : public std::vector<Args...>, public yccommon<YcSet<Args...>> {
+class YcVector : public std::vector<Args...>, public YcCommon<YcSet<Args...>> {
 public:
+    template <typename... CtorArgs>
+    YcVector(CtorArgs&&... ctorArgs) : std::vector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
+
     static constexpr bool isSorted() { return false; }
     static constexpr bool isUnique() { return false; }
 
@@ -31,8 +34,7 @@ public:
 
 private:
     template <typename... CtorArgs>
-    YcSortedVector(CtorArgs&&... ctorArgs)
-        : YcVector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
+    YcSortedVector(CtorArgs&&... ctorArgs) : YcVector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
 
     friend class YcVector<Args...>;
 };
