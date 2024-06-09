@@ -1,6 +1,7 @@
 workspace "ycstl"
     architecture "x64"
     startproject "ycstl"
+    toolset "clang"
 
     configurations
     {
@@ -9,6 +10,7 @@ workspace "ycstl"
     }
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+testoutputdir = "tests"
 
 project "ycstl"
     location "."
@@ -25,19 +27,13 @@ project "ycstl"
         "src/**.cpp"
     }
 
-    includedirs
-    {
-        "include",
-    }
+    includedirs { "include" }
 
-    libdirs
-    {
-    }
+    libdirs {}
 
     filter "system:linux"
         cppdialect "C++20"
         systemversion "latest"
-        toolset "clang"
 
     filter "system:windows"
         cppdialect "C++20"
@@ -100,8 +96,8 @@ function create_test_project(name)
         cppdialect "C++20"
         staticruntime "on"
 
-        targetdir ("bin/" .. outputdir .. "/%{prj.basename}")
-        objdir ("bin-int/" .. outputdir .. "/%{prj.basename}")
+        targetdir ("bin/" .. testoutputdir .. "/%{prj.basename}")
+        objdir ("bin-int/" .. testoutputdir .. "/%{prj.basename}")
 
         files { (name) }
 
