@@ -11,7 +11,7 @@ template <typename... Args>
 class YcSortedVector;
 
 template <typename... Args>
-class YcVector : public std::vector<Args...>, public YcCommon<YcVector<Args...>> {
+class YcVector : public IYcContainer<YcVector<Args...>> {
 public:
     template <typename... CtorArgs>
     YcVector(CtorArgs&&... ctorArgs) : std::vector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
@@ -29,7 +29,7 @@ public:
 };
 
 template <typename... Args>
-class YcSortedVector : public YcVector<Args...> {
+class YcSortedVector : public IYcContainer<YcSortedVector<Args...>> {
 public:
     static constexpr bool isSorted() { return true; }
     static constexpr bool isUnique() { return false; }

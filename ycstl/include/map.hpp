@@ -7,7 +7,7 @@
 namespace ycstl {
 
 template <typename... Args>
-class YcMap : public std::map<Args...>, public YcCommon<YcMap<Args...>> {
+class YcMap : public std::map<Args...>, public IYcContainer<YcMap<Args...>> {
 public:
     static constexpr bool isSorted() { return true; }
     static constexpr bool isUnique() { return true; }

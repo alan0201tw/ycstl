@@ -7,7 +7,7 @@
 namespace ycstl {
 
 template <typename... Args>
-class YcSet : public std::set<Args...>, public YcCommon<YcSet<Args...>> {
+class YcSet : public std::set<Args...>, public IYcContainer<YcSet<Args...>> {
 public:
     template <typename... CtorArgs>
     YcSet(CtorArgs&&... ctorArgs) : std::set<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}

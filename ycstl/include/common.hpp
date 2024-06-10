@@ -3,7 +3,7 @@
 namespace ycstl {
 
 template <typename T>
-class YcCommon {
+class IYcContainer {
 public:
     static constexpr bool isSorted() { return T::isSorted(); }
     static constexpr bool isUnique() { return T::isUnique(); }
