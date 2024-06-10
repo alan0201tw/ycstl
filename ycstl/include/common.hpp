@@ -5,8 +5,8 @@ namespace ycstl {
 template <typename T>
 class IYcContainer {
 public:
-    static constexpr bool isSorted() { return T::isSorted(); }
-    static constexpr bool isUnique() { return T::isUnique(); }
+    bool isSorted() const { return static_cast<const T*>(this)->isSorted(); }
+    bool isUnique() const { return static_cast<const T*>(this)->isUnique(); }
 
     bool isSubsetOf(const auto& rhs) const {
         const auto castedThis = static_cast<const T*>(this);

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "common.hpp"
+#include "macro.hpp"
 
 namespace ycstl {
 
@@ -14,18 +15,32 @@ template <typename... Args>
 class YcVector : public IYcContainer<YcVector<Args...>> {
 public:
     template <typename... CtorArgs>
-    YcVector(CtorArgs&&... ctorArgs) : std::vector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
+    YcVector(CtorArgs&&... ctorArgs) : m_vector(std::forward<CtorArgs>(ctorArgs)...), m_isSorted {false} {}
     template <class T>
-    YcVector(std::initializer_list<T>&& ctorArgs) : std::vector<Args...>(ctorArgs) {}
+    YcVector(std::initializer_list<T>&& ctorArgs) : m_vector(ctorArgs), m_isSorted {false} {}
 
-    static constexpr bool isSorted() { return false; }
+    bool isSorted() { return m_isSorted; }
     static constexpr bool isUnique() { return false; }
 
+    void sort() { std::sort(m_vector.begin(), m_vector.end()); }
     auto getSortedVector() const {
-        auto sortedVector = YcSortedVector<Args...> {*this};
-        std::sort(sortedVector.begin(), sortedVector.end());
-        return sortedVector;
+        auto copiedVector = m_vector;
+        std::sort(copiedVector.begin(), copiedVector.end());
+        return YcSortedVector<Args...> {std::move(copiedVector)};
     }
+
+    IMPL_ITERABLE(m_vector)
+    IMPL_DELEGATE_METHOD(m_vector, emplace_back)
+    IMPL_CONST_DELEGATE_METHOD(m_vector, size)
+    IMPL_CONST_DELEGATE_METHOD(m_vector, at)
+    IMPL_CONST_DELEGATE_METHOD(m_vector, capacity)
+    IMPL_DELEGATE_METHOD(m_vector, at)
+    IMPL_DELEGATE_METHOD(m_vector, reserve)
+    IMPL_DELEGATE_METHOD(m_vector, resize)
+
+private:
+    std::vector<Args...> m_vector;
+    bool m_isSorted;
 };
 
 template <typename... Args>
@@ -34,11 +49,20 @@ public:
     static constexpr bool isSorted() { return true; }
     static constexpr bool isUnique() { return false; }
 
+    IMPL_CONST_ITERABLE(m_sortedVector)
+    IMPL_CONST_DELEGATE_METHOD(m_sortedVector, size)
+    IMPL_CONST_DELEGATE_METHOD(m_sortedVector, at)
+    IMPL_CONST_DELEGATE_METHOD(m_sortedVector, capacity)
+    IMPL_DELEGATE_METHOD(m_sortedVector, reserve)
+    IMPL_DELEGATE_METHOD(m_sortedVector, resize)
+
 private:
     template <typename... CtorArgs>
-    YcSortedVector(CtorArgs&&... ctorArgs) : YcVector<Args...>(std::forward<CtorArgs>(ctorArgs)...) {}
+    YcSortedVector(CtorArgs&&... ctorArgs) : m_sortedVector(std::forward<CtorArgs>(ctorArgs)...) {}
 
     friend class YcVector<Args...>;
+
+    const std::vector<Args...> m_sortedVector;
 };
 
 }  // namespace ycstl
