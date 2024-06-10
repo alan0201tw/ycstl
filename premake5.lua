@@ -90,7 +90,7 @@ project "gtest_main"
 
 function create_test_project(name)
     project (path.getbasename(name))
-        location "ycstl-test"
+        -- location "ycstl-test"
         kind "ConsoleApp"
         language "C++"
         cppdialect "C++20"
@@ -131,10 +131,15 @@ newaction {
     description = "Export project information as Lua tables",
 
     execute = function()
-        os.execute("wsl --exec make")
-        testcases = os.matchfiles("bin/**/test*")
-        for i, testcase in pairs(testcases) do
-            os.execute("wsl --exec " .. testcase)
+        -- Ref: https://www.lua.org/manual/5.4/manual.html#pdf-os.execute
+        local exit = os.execute("wsl --exec make")
+        print(exit)
+        if (true == exit)
+        then
+            testcases = os.matchfiles("bin/**/test*")
+            for i, testcase in pairs(testcases) do
+                os.execute("wsl --exec " .. testcase)
+            end
         end
     end
 }
