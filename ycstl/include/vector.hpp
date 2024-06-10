@@ -40,6 +40,7 @@ public:
     IMPL_DELEGATE_METHOD(m_vector, at)
     IMPL_DELEGATE_METHOD(m_vector, reserve)
     IMPL_DELEGATE_METHOD(m_vector, resize)
+    IMPL_DELEGATE_METHOD(m_vector, erase)
 
 private:
     void markDirty() { m_isSorted = false; }
@@ -60,6 +61,7 @@ public:
     IMPL_CONST_DELEGATE_METHOD(m_sortedVector, capacity)
     IMPL_DELEGATE_METHOD(m_sortedVector, reserve)
     IMPL_DELEGATE_METHOD(m_sortedVector, resize)
+    IMPL_DELEGATE_METHOD(m_sortedVector, erase)  // Erasing from a sorted vector maintains its order
 
 private:
     template <typename... CtorArgs>
@@ -67,7 +69,7 @@ private:
 
     friend class YcVector<Args...>;
 
-    const std::vector<Args...> m_sortedVector;
+    std::vector<Args...> m_sortedVector;
 };
 
 }  // namespace ycstl

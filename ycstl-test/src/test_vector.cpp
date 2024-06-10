@@ -115,3 +115,24 @@ TEST(vector, sort) {
         EXPECT_FALSE(testVector.isSorted());
     }
 }
+
+TEST(vector, erase) {
+    const auto testVector = ycstl::YcVector<int> {210, 101, -12, 997887, -3344, 0, 1, -3, 7, 32145, 11};
+    auto testSortedVector = testVector.getSortedVector();
+    EXPECT_TRUE(std::is_sorted(testSortedVector.cbegin(), testSortedVector.cend()));
+    EXPECT_TRUE(testSortedVector.isSorted());
+    {
+        const auto originalSize = testSortedVector.size();
+        testSortedVector.erase(testSortedVector.cbegin() + 2);
+        EXPECT_EQ(originalSize - 1u, testSortedVector.size());
+        EXPECT_TRUE(std::is_sorted(testSortedVector.cbegin(), testSortedVector.cend()));
+        EXPECT_TRUE(testSortedVector.isSorted());
+    }
+    {
+        const auto originalSize = testSortedVector.size();
+        testSortedVector.erase(testSortedVector.cbegin(), testSortedVector.cbegin() + 2);
+        EXPECT_EQ(originalSize - 2u, testSortedVector.size());
+        EXPECT_TRUE(std::is_sorted(testSortedVector.cbegin(), testSortedVector.cend()));
+        EXPECT_TRUE(testSortedVector.isSorted());
+    }
+}
