@@ -86,3 +86,32 @@ TEST(vector, iterable) {
     }
     EXPECT_EQ(testVector0.size() * testVector1.size(), testVector2.size());
 }
+
+TEST(vector, sort) {
+    {
+        auto testVectorSorted = ycstl::YcVector<int> {10, 11, 12};
+        EXPECT_TRUE(std::is_sorted(testVectorSorted.cbegin(), testVectorSorted.cend()));
+        EXPECT_FALSE(testVectorSorted.isSorted());
+
+        testVectorSorted.sort();
+        EXPECT_TRUE(std::is_sorted(testVectorSorted.cbegin(), testVectorSorted.cend()));
+        EXPECT_TRUE(testVectorSorted.isSorted());
+
+        testVectorSorted.emplace_back(100);
+        EXPECT_TRUE(std::is_sorted(testVectorSorted.cbegin(), testVectorSorted.cend()));
+        EXPECT_FALSE(testVectorSorted.isSorted());
+    }
+    {
+        auto testVector = ycstl::YcVector<int> {210, 101, -12, 997887, -3344};
+        EXPECT_FALSE(std::is_sorted(testVector.cbegin(), testVector.cend()));
+        EXPECT_FALSE(testVector.isSorted());
+
+        testVector.sort();
+        EXPECT_TRUE(std::is_sorted(testVector.cbegin(), testVector.cend()));
+        EXPECT_TRUE(testVector.isSorted());
+
+        testVector.emplace_back(100);
+        EXPECT_FALSE(std::is_sorted(testVector.cbegin(), testVector.cend()));
+        EXPECT_FALSE(testVector.isSorted());
+    }
+}

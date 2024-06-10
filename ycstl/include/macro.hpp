@@ -19,6 +19,13 @@ namespace ycstl {
         return proxy.method(std::forward<MethodArgs>(args)...); \
     }
 
+#define IMPL_DELEGATE_METHOD_WITH_HOOK(proxy, method, hook)     \
+    template <typename... MethodArgs>                           \
+    auto method(MethodArgs&&... args) {                         \
+        hook();                                                 \
+        return proxy.method(std::forward<MethodArgs>(args)...); \
+    }
+
 #define IMPL_CONST_DELEGATE_METHOD(proxy, method)               \
     template <typename... MethodArgs>                           \
     auto method(MethodArgs&&... args) const {                   \

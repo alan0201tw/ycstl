@@ -22,7 +22,10 @@ public:
     bool isSorted() { return m_isSorted; }
     static constexpr bool isUnique() { return false; }
 
-    void sort() { std::sort(m_vector.begin(), m_vector.end()); }
+    void sort() {
+        std::sort(m_vector.begin(), m_vector.end());
+        m_isSorted = true;
+    }
     auto getSortedVector() const {
         auto copiedVector = m_vector;
         std::sort(copiedVector.begin(), copiedVector.end());
@@ -30,7 +33,7 @@ public:
     }
 
     IMPL_ITERABLE(m_vector)
-    IMPL_DELEGATE_METHOD(m_vector, emplace_back)
+    IMPL_DELEGATE_METHOD_WITH_HOOK(m_vector, emplace_back, markDirty)
     IMPL_CONST_DELEGATE_METHOD(m_vector, size)
     IMPL_CONST_DELEGATE_METHOD(m_vector, at)
     IMPL_CONST_DELEGATE_METHOD(m_vector, capacity)
@@ -39,6 +42,8 @@ public:
     IMPL_DELEGATE_METHOD(m_vector, resize)
 
 private:
+    void markDirty() { m_isSorted = false; }
+
     std::vector<Args...> m_vector;
     bool m_isSorted;
 };
