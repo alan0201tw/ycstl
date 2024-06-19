@@ -19,7 +19,7 @@ public:
     template <class T>
     YcVector(std::initializer_list<T>&& ctorArgs) : m_vector(ctorArgs), m_isSorted {false} {}
 
-    bool isSorted() { return m_isSorted; }
+    bool isSorted() const { return m_isSorted; }
     static constexpr bool isUnique() { return false; }
 
     void sort() {
