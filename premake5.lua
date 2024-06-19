@@ -104,6 +104,8 @@ function create_test_project(name)
         includedirs
         {
             "vendor/googletest/googletest/include",
+            "vendor/googletest/googlemock/include",
+            "ycstl-test/include",
             "ycstl"
         }
 
