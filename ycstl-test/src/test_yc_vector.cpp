@@ -7,7 +7,7 @@
 
 #include "ycstl.hpp"
 
-TEST(vector, basic) {
+TEST(TestYcVector, basic) {
     constexpr auto MaxElement = 10;
     auto testVector = ycstl::YcVector<int> {};
     for (int i = MaxElement; i >= 0; --i) {
@@ -25,7 +25,7 @@ TEST(vector, basic) {
     EXPECT_FALSE(testSortedVector.isUnique());
 }
 
-TEST(vector, isSubsetOf) {
+TEST(TestYcVector, isSubsetOf) {
     const auto testVector0 = ycstl::YcVector<int> {0, 1, 2};
     const auto testVector1 = ycstl::YcVector<int> {10, 11, 12, 20};
     const auto stlSet = std::set<int> {10, 11, 12, 20, 21, 22, 23, 24};
@@ -50,7 +50,7 @@ public:
     void fail() const { ADD_FAILURE() << FailureMessage; }
 };
 
-TEST(vector, reserve) {
+TEST(TestYcVector, reserve) {
     auto testVector = ycstl::YcVector<Dummy> {};
     EXPECT_NONFATAL_FAILURE(testVector.emplace_back(), Dummy::FailureMessage);
     constexpr auto Capacity = 256u;
@@ -66,14 +66,14 @@ TEST(vector, reserve) {
     EXPECT_NONFATAL_FAILURE(testVector.emplace_back(), Dummy::FailureMessage);
 }
 
-TEST(vector, resize) {
+TEST(TestYcVector, resize) {
     EXPECT_NONFATAL_FAILURE(std::make_unique<ycstl::YcVector<Dummy>>(1), Dummy::FailureMessage);
 
     auto testVector1 = ycstl::YcVector<Dummy> {};
     EXPECT_NONFATAL_FAILURE(testVector1.resize(1), Dummy::FailureMessage);
 }
 
-TEST(vector, iterable) {
+TEST(TestYcVector, iterable) {
     const auto testVector0 = ycstl::YcVector<int> {0, 1, 2};
     const auto testVector1 = ycstl::YcVector<int> {10, 11, 12, 20};
 
@@ -87,7 +87,7 @@ TEST(vector, iterable) {
     EXPECT_EQ(testVector0.size() * testVector1.size(), testVector2.size());
 }
 
-TEST(vector, sort) {
+TEST(TestYcVector, sort) {
     {
         auto testVectorSorted = ycstl::YcVector<int> {10, 11, 12};
         EXPECT_TRUE(std::is_sorted(testVectorSorted.cbegin(), testVectorSorted.cend()));
@@ -116,7 +116,7 @@ TEST(vector, sort) {
     }
 }
 
-TEST(vector, erase) {
+TEST(TestYcVector, erase) {
     const auto testVector = ycstl::YcVector<int> {210, 101, -12, 997887, -3344, 0, 1, -3, 7, 32145, 11};
     auto testSortedVector = testVector.getSortedVector();
     EXPECT_TRUE(std::is_sorted(testSortedVector.cbegin(), testSortedVector.cend()));

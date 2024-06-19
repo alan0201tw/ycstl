@@ -6,13 +6,13 @@
 
 #include "ycstl.hpp"
 
-TEST(set, basic) {
+TEST(TestYcSet, basic) {
     auto testSet = ycstl::YcSet<int> {};
     EXPECT_TRUE(testSet.isSorted());
     EXPECT_TRUE(testSet.isUnique());
 }
 
-TEST(set, isSubsetOf) {
+TEST(TestYcSet, isSubsetOf) {
     const auto testSet0 = ycstl::YcSet<int> {0, 1, 2};
     const auto testSet1 = ycstl::YcSet<int> {0, 1, 2, 3, 4};
     EXPECT_TRUE(testSet0.isSubsetOf(testSet1));
