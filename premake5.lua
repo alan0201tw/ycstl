@@ -135,13 +135,15 @@ newaction {
     execute = function()
         -- Ref: https://www.lua.org/manual/5.4/manual.html#pdf-os.execute
         local exit = os.execute("wsl --exec make")
-        print(exit)
         if (true == exit)
         then
+            print("Start executing testcases...")
             testcases = os.matchfiles("bin/**/test*")
             for i, testcase in pairs(testcases) do
                 os.execute("wsl --exec " .. testcase)
             end
+        else
+            print("Abort due to build fail...")
         end
     end
 }
